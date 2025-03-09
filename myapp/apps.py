@@ -23,12 +23,6 @@ def crear_grupos(sender, **kwargs):
 
     print("Grupos y permisos creados correctamente.")
 
-class MyAppConfig(AppConfig):
-    name = 'myapp'
-
-    def ready(self):
-
-        post_migrate.connect(crear_grupos, sender=self)
 
 def crear_monedas_y_tasa_cambio(sender, **kwargs):
 
@@ -55,8 +49,11 @@ def crear_monedas_y_tasa_cambio(sender, **kwargs):
         moneda_destino=bs,
         defaults={'tasa': 1.0}  # Tasa de cambio predeterminada
     )
+
 class MyAppConfig(AppConfig):
     name = 'myapp'
-    def ready(self):
 
+    def ready(self):
+        # Conectamos ambas funciones a la señal post_migrate
+        post_migrate.connect(crear_grupos, sender=self)
         post_migrate.connect(crear_monedas_y_tasa_cambio, sender=self)

@@ -1,12 +1,12 @@
 services:
   - type: web
-    name: 
+    name: invofer_web
     runtime: python
     buildCommand: "./build.sh"
     startCommand: "gunicorn mysite.wsgi:application"
     envVars:
       - key: DATABASE_URL
-        value: 
+        value: postgresql://sofia:tR9tPBNpJ6mCQahtiZOl361IUCzJtyg1@dpg-cv6vmjnnoe9s73c36psg-a/invofer_final
       - key: SECRET_KEY
         value: django-insecure-1e*e#0+(9@7w)kz$8#r1p^=8r8m00hh)5esht7z2^2a2#mfebf
       - key: DEBUG

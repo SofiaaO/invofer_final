@@ -23,38 +23,39 @@ SIMPLE_HISTORY_PERMISSIONS_ENABLED = False
 SECRET_KEY = 'django-insecure-1e*e#0+(9@7w)kz$8#r1p^=8r8m00hh)5esht7z2^2a2#mfebf'
 LOGIN_URL = '/' 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = []
+
+ALLOWED_HOSTS = [
+    'invofer-web.onrender.com',
+    'localhost',  # Para desarrollo local
+    '127.0.0.1',  # Para desarrollo local
+]
 
 
 # Application definition
 
 INSTALLED_APPS = [
-    
+    'whitenoise.runserver_nostatic',  # Para servir archivos estáticos en desarrollo
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
-    'django.contrib.staticfiles',
-    'simple_history',
-    'myapp'
+    'django.contrib.staticfiles',  # Para servir archivos estáticos en producción
+    'myapp',  # Tu aplicación personalizada
 ]
-
 MIDDLEWARE = [
-    
     'django.middleware.security.SecurityMiddleware',
-    'django.contrib.sessions.middleware.SessionMiddleware',
-    'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',  # Middleware de WhiteNoise
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'simple_history.middleware.HistoryRequestMiddleware',
 ]
+
 
 ROOT_URLCONF = 'mysite.urls'
 import os
@@ -80,14 +81,14 @@ AUTH_USER_MODEL = 'myapp.CustomUser'
 
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
-
+import dj_database_url
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
+    'default': dj_database_url.config(
+        default=os.environ.get('DATABASE_URL'),
+        conn_max_age=600,
+        ssl_require=True
+    )
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators
@@ -125,7 +126,7 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 STATIC_ROOT = BASE_DIR / 'staticfiles'
-
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 
