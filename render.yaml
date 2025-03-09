@@ -1,0 +1,13 @@
+services:
+  - type: web
+    name: 
+    runtime: python
+    buildCommand: "./build.sh"
+    startCommand: "gunicorn mysite.wsgi:application"
+    envVars:
+      - key: DATABASE_URL
+        value: 
+      - key: SECRET_KEY
+        value: django-insecure-1e*e#0+(9@7w)kz$8#r1p^=8r8m00hh)5esht7z2^2a2#mfebf
+      - key: DEBUG
+        value: "False"
